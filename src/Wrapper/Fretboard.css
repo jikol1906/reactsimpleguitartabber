@@ -1,0 +1,14 @@
+.wrapper {
+    position: relative;
+    height: 6em;
+    width: 37em;
+    margin: 2em auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.string {
+    height: 1px;
+    background: black;
+}
