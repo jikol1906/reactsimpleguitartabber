@@ -29,19 +29,31 @@ const App: React.FC = () => {
     dispatchNotes({ type: 'ADD', note });
   };
 
-  const keyPressed = (e: KeyboardEvent) => {
+  const arrowKeyPressed = (e: KeyboardEvent) => {
     switch (e.key) {
       case 'ArrowUp':
-        setNoteSelector((prev) => ({ ...prev, y: prev.y - 1 }));
+        setNoteSelector((prev) => ({
+          ...prev,
+          y: prev.y === 0 ? 0 : prev.y - 1,
+        }));
         break;
       case 'ArrowLeft':
-        setNoteSelector((prev) => ({ ...prev, x: prev.x - 1 }));
+        setNoteSelector((prev) => ({
+          ...prev,
+          x: prev.x === 1 ? 1 : prev.x - 1,
+        }));
         break;
       case 'ArrowDown':
-        setNoteSelector((prev) => ({ ...prev, y: prev.y + 1 }));
+        setNoteSelector((prev) => ({
+          ...prev,
+          y: prev.y === 5 ? 5 : prev.y + 1,
+        }));
         break;
       case 'ArrowRight':
-        setNoteSelector((prev) => ({ ...prev, x: prev.x + 1 }));
+        setNoteSelector((prev) => ({
+          ...prev,
+          x: prev.x === 36 ? 36 : prev.x + 1,
+        }));
         break;
     }
   };
