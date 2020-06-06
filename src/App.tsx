@@ -66,11 +66,11 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    document.addEventListener('keydown', keyPressed);
+    document.addEventListener('keydown', arrowKeyPressed);
     window.addEventListener('keydown', preventScrolling, false);
 
     return () => {
-      document.removeEventListener('keydown', keyPressed);
+      document.removeEventListener('keydown', arrowKeyPressed);
       window.removeEventListener('keydown', preventScrolling);
     };
   }, []);
