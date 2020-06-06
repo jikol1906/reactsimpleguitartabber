@@ -1,17 +1,24 @@
 import React from 'react';
 import './Fretboard.css';
 import Note from '../Note/Note';
-import { Note as noteType } from '../App';
+import INote from '../Models/INotes';
 
 interface Props {
-  tuning:string[],
-  notes:noteType[]
+  id: number;
+  tuning: string[];
+  notes: INote[];
+  noteSelectorPosition?: { x: number; y: number };
 }
 
-const Fretboard : React.FC<Props> = ({tuning,notes}) => {
+const Fretboard: React.FC<Props> = ({
+  id,
+  tuning,
+  notes,
+  noteSelectorPosition,
+}) => {
   return (
     <div>
-      <div id='0' className='wrapper'>
+      <div id={id.toString()} className='wrapper'>
         <div className='string'></div>
         <div className='string'></div>
         <div className='string'></div>
@@ -24,9 +31,17 @@ const Fretboard : React.FC<Props> = ({tuning,notes}) => {
         {notes.map(({ x, y, value }) => (
           <Note key={`${x}${y}`} x={x} y={y} val={value} />
         ))}
+        {noteSelectorPosition && (
+          <div
+            style={{
+              transform: `translate(${noteSelectorPosition.x*100}%,${noteSelectorPosition.y*100}%)`,
+            }}
+            className='fretboard__note-selector'
+          ></div>
+        )}
       </div>
     </div>
   );
-}
+};
 
 export default Fretboard;
