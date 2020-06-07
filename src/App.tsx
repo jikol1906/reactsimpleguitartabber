@@ -27,10 +27,9 @@ const App: React.FC = () => {
 
   const addNote = useCallback((value:string) => {
     
-    dispatchNotes({ type: 'ADD', note : {x,y,value} });
-  },[x,y]);
-
-
+  const removeNote = useCallback(() => {
+    dispatchNotes({ type: 'REMOVE', x, y });
+  }, [x, y]);
 
   useEffect(() => {
     const arrowKeyPressed = (e: KeyboardEvent) => {
@@ -59,6 +58,9 @@ const App: React.FC = () => {
             x: prev.x === 36 ? 36 : prev.x + 1,
           }));
           break;
+        case 'Backspace':
+          removeNote();
+          break;
         default:
          if(/[0-9]/.test(e.key)) {
           addNote(e.key)
@@ -79,7 +81,7 @@ const App: React.FC = () => {
       document.removeEventListener('keydown', arrowKeyPressed);
       window.removeEventListener('keydown', preventScrolling);
     };
-  }, [addNote]);
+  }, [addNote, removeNote]);
 
   return (
     <div className='App'>
