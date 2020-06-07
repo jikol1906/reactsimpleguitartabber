@@ -31,6 +31,10 @@ const App: React.FC = () => {
     dispatchNotes({ type: 'REMOVE', x, y });
   }, [x, y]);
 
+  const clearNotes = useCallback(() => {
+    dispatchNotes({type:'CLEAR'});
+  },[])
+
   useEffect(() => {
     const arrowKeyPressed = (e: KeyboardEvent) => {
       switch (e.key) {
@@ -86,6 +90,7 @@ const App: React.FC = () => {
   return (
     <div className='App'>
       <Toolbar
+        clearNotes={clearNotes}
         addNote={addNote}
         drawerToggleClickHandler={drawerToggleClickHandler}
       />

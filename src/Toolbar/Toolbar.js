@@ -2,7 +2,7 @@ import React from 'react';
 import './Toolbar.css';
 import DrawerToggleButton from '../SideDrawer/DrawerToggleButton';
 
-export default function Toolbar({ drawerToggleClickHandler }) {
+export default function Toolbar({clearNotes,addNote,drawerToggleClickHandler}) {
   return (
     <header className='toolbar'>
       <nav className='toolbar__navigation'>
@@ -41,7 +41,7 @@ export default function Toolbar({ drawerToggleClickHandler }) {
               <button>Insert</button>
             </li>
             <li>
-              <button>Reset</button>
+              <button onClick={clearNotes}>Reset</button>
             </li>
           </ul>
         </div>
