@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useReducer } from 'react';
+import React, { useState, useEffect, useMemo, useReducer, useCallback } from 'react';
 import Fretboard from './Wrapper/Fretboard';
 import './App.css';
 import Toolbar from './Toolbar/Toolbar';
@@ -15,7 +15,7 @@ const App: React.FC = () => {
   const [tuning, setTuning] = useState(['E', 'A', 'D', 'G', 'B', 'E']);
   const [{ x, y, fretboardNumber }, setNoteSelector] = useState({
     x: 1,
-    y: 1,
+    y: 0,
     fretboardNumber: 0,
   });
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
@@ -25,55 +25,61 @@ const App: React.FC = () => {
     setSideDrawerOpen((prev) => !prev);
   };
 
-  const addNote = (note: INote) => {
-    dispatchNotes({ type: 'ADD', note });
-  };
+  const addNote = useCallback((value:string) => {
+    
+    dispatchNotes({ type: 'ADD', note : {x,y,value} });
+  },[x,y]);
 
-  const arrowKeyPressed = (e: KeyboardEvent) => {
-    switch (e.key) {
-      case 'ArrowUp':
-        setNoteSelector((prev) => ({
-          ...prev,
-          y: prev.y === 0 ? 0 : prev.y - 1,
-        }));
-        break;
-      case 'ArrowLeft':
-        setNoteSelector((prev) => ({
-          ...prev,
-          x: prev.x === 1 ? 1 : prev.x - 1,
-        }));
-        break;
-      case 'ArrowDown':
-        setNoteSelector((prev) => ({
-          ...prev,
-          y: prev.y === 5 ? 5 : prev.y + 1,
-        }));
-        break;
-      case 'ArrowRight':
-        setNoteSelector((prev) => ({
-          ...prev,
-          x: prev.x === 36 ? 36 : prev.x + 1,
-        }));
-        break;
-    }
-  };
 
-  const preventScrolling = (e: KeyboardEvent) => {
-    // space and arrow keys
-    if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-      e.preventDefault();
-    }
-  };
 
   useEffect(() => {
+    const arrowKeyPressed = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case 'ArrowUp':
+          setNoteSelector((prev) => ({
+            ...prev,
+            y: prev.y === 0 ? 0 : prev.y - 1,
+          }));
+          break;
+        case 'ArrowLeft':
+          setNoteSelector((prev) => ({
+            ...prev,
+            x: prev.x === 1 ? 1 : prev.x - 1,
+          }));
+          break;
+        case 'ArrowDown':
+          setNoteSelector((prev) => ({
+            ...prev,
+            y: prev.y === 5 ? 5 : prev.y + 1,
+          }));
+          break;
+        case 'ArrowRight':
+          setNoteSelector((prev) => ({
+            ...prev,
+            x: prev.x === 36 ? 36 : prev.x + 1,
+          }));
+          break;
+        default:
+         if(/[0-9]/.test(e.key)) {
+          addNote(e.key)
+         }
+      }
+    };
+    const preventScrolling = (e: KeyboardEvent) => {
+      // space and arrow keys
+      if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+      }
+    };
     document.addEventListener('keydown', arrowKeyPressed);
     window.addEventListener('keydown', preventScrolling, false);
+    
 
     return () => {
       document.removeEventListener('keydown', arrowKeyPressed);
       window.removeEventListener('keydown', preventScrolling);
     };
-  }, []);
+  }, [addNote]);
 
   return (
     <div className='App'>
@@ -85,9 +91,13 @@ const App: React.FC = () => {
       {sideDrawerOpen && <Backdrop
         drawerToggleClickHandler={drawerToggleClickHandler}
       />}
-      />
       <main style={{ marginTop: '100px' }}>
-        <Fretboard noteSelectorPosition={{x,y}} tuning={tuning} notes={notes} id={0} />
+        <Fretboard
+          noteSelectorPosition={{ x, y }}
+          tuning={tuning}
+          notes={notes}
+          id={0}
+        />
       </main>
     </div>
   );
