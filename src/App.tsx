@@ -82,9 +82,9 @@ const App: React.FC = () => {
         drawerToggleClickHandler={drawerToggleClickHandler}
       />
       <SideDrawer show={sideDrawerOpen} />
-      <Backdrop
-        show={sideDrawerOpen}
+      {sideDrawerOpen && <Backdrop
         drawerToggleClickHandler={drawerToggleClickHandler}
+      />}
       />
       <main style={{ marginTop: '100px' }}>
         <Fretboard noteSelectorPosition={{x,y}} tuning={tuning} notes={notes} id={0} />
