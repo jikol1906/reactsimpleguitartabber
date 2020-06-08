@@ -15,11 +15,11 @@
 
 .fretboard__note-selector {
     box-sizing: border-box;
+    border-radius: 5px;
     border: 1px solid black;
     width: 1em;
     height: 1em;
     position: absolute;
     top:0;
     left:0;
-    background-color: white;
 }

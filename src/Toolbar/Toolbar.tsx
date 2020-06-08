@@ -38,7 +38,7 @@ const Toolbar: React.FC<Props> = ({addFretBoard, removeFretBoard, clearNotes,add
               <NavbarButton click={removeFretBoard}>Remove Fretboard</NavbarButton>
             </li>
             <li>
-              <NavbarButton click={clearNotes}>Reset</NavbarButton>
+              <NavbarButton click={clearNotes}>Delete All Notes</NavbarButton>
             </li>
           </ul>
         </div>

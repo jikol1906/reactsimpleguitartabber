@@ -7,7 +7,7 @@ interface Props {
   id: number;
   tuning: string[];
   notes: INote[];
-  noteSelectorPosition?: { x: number; y: number };
+  noteSelectorPosition?: { x: number; y: number } | null;
 }
 
 const Fretboard: React.FC<Props> = ({
@@ -34,7 +34,7 @@ const Fretboard: React.FC<Props> = ({
         {noteSelectorPosition && (
           <div
             style={{
-              transform: `translate(${noteSelectorPosition.x*100}%,${noteSelectorPosition.y*100}%)`,
+              transform: `translate(${noteSelectorPosition.x}em,${noteSelectorPosition.y}em)`,
             }}
             className='fretboard__note-selector'
           ></div>
