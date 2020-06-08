@@ -19,6 +19,7 @@ const App: React.FC = () => {
     fretboardNumber: 0,
   });
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
+  const [numOfFretboards, setNumOfFretboard] = useState(2);
   const [notes, dispatchNotes] = useReducer(notesReducer, []);
 
   const drawerToggleClickHandler = () => {
@@ -34,6 +35,14 @@ const App: React.FC = () => {
   const clearNotes = useCallback(() => {
     dispatchNotes({type:'CLEAR'});
   },[])
+
+  const addFretBord = useCallback(() => {
+    setNumOfFretboard((prev) => prev + 1);
+  }, []);
+
+  const removeFretBoard = useCallback(() => {
+    setNumOfFretboard((prev) => prev === 1 ? 1: prev - 1);
+  }, []);
 
   useEffect(() => {
     const arrowKeyPressed = (e: KeyboardEvent) => {
@@ -85,12 +94,32 @@ const App: React.FC = () => {
       document.removeEventListener('keydown', arrowKeyPressed);
       window.removeEventListener('keydown', preventScrolling);
     };
-  }, [addNote, removeNote]);
+  }, [addNote, currentFretboard, numOfFretboards, removeNote]);
+
+  const fretboards = useMemo(() => {
+    const fretboards: JSX.Element[] = [];
+
+    for (let i = 0; i < numOfFretboards; i++) {
+      fretboards.push(
+        <Fretboard
+          noteSelectorPosition={currentFretboard === i ? { x, y } : null}
+          key={i}
+          id={i}
+          tuning={tuning}
+          notes={notes}
+        />
+      );
+    }
+
+    return fretboards;
+  }, [numOfFretboards, tuning, notes, x, y,currentFretboard]);
 
   return (
     <div className='App'>
       <Toolbar
         clearNotes={clearNotes}
+        addFretBoard={addFretBord}
+        removeFretBoard={removeFretBoard}
         addNote={addNote}
         drawerToggleClickHandler={drawerToggleClickHandler}
       />

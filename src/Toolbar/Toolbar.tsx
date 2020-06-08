@@ -6,10 +6,12 @@ import { NavbarButton } from '../UI/NavbarButton';
 interface Props {
   drawerToggleClickHandler:() => void,
   addNote:(value:string) =>void,
-  clearNotes:() => void
+  clearNotes:() => void,
+  addFretBoard:() => void,
+  removeFretBoard:() => void,
 }
 
-const Toolbar: React.FC<Props> = ({clearNotes,addNote,drawerToggleClickHandler}) => {
+const Toolbar: React.FC<Props> = ({addFretBoard, removeFretBoard, clearNotes,addNote,drawerToggleClickHandler}) => {
   return (
     <header className='toolbar'>
       <nav className='toolbar__navigation'>
@@ -30,7 +32,10 @@ const Toolbar: React.FC<Props> = ({clearNotes,addNote,drawerToggleClickHandler})
               </select>
             </li>
             <li>
-              <NavbarButton click={() => {}}>New Fretboard</NavbarButton>
+              <NavbarButton click={addFretBoard}>New Fretboard</NavbarButton>
+            </li>
+            <li>
+              <NavbarButton click={removeFretBoard}>Remove Fretboard</NavbarButton>
             </li>
             <li>
               <NavbarButton click={clearNotes}>Reset</NavbarButton>
