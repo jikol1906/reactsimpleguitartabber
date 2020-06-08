@@ -21,7 +21,7 @@ const App: React.FC = () => {
   });
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const [numOfFretboards, setNumOfFretboard] = useState(1);
-  const [notes, dispatchNotes] = useReducer(notesReducer, []);
+  const [notes, dispatchNotes] = useReducer(notesReducer, [[]]);
 
   const drawerToggleClickHandler = () => {
     setSideDrawerOpen((prev) => !prev);
@@ -29,25 +29,27 @@ const App: React.FC = () => {
 
   const addNote = useCallback(
     (value: string) => {
-      dispatchNotes({ type: 'ADD', note: { x, y, value } });
+      dispatchNotes({ type: 'ADD', note: { x, y, value }, currentFretboard });
     },
-    [x, y]
+    [x, y,currentFretboard]
   );
 
   const removeNote = useCallback(() => {
-    dispatchNotes({ type: 'REMOVE', x, y });
-  }, [x, y]);
+    dispatchNotes({ type: 'REMOVE', x, y ,currentFretboard});
+  }, [x, y,currentFretboard]);
 
   const clearNotes = useCallback(() => {
-    dispatchNotes({ type: 'CLEAR' });
-  }, []);
+    dispatchNotes({ type: 'CLEAR' ,numOfFretboards});
+  }, [numOfFretboards]);
 
   const addFretBord = useCallback(() => {
     setNumOfFretboard((prev) => prev + 1);
+    dispatchNotes({type:'NEW_FRETBOARD'})
   }, []);
 
   const removeFretBoard = useCallback(() => {
-    setNumOfFretboard((prev) => prev === 1 ? 1: prev - 1);    
+    setNumOfFretboard((prev) => (prev === 1 ? 1 : prev - 1));
+    dispatchNotes({type:'REMOVE_FRETBOARD'})
   }, []);
 
   useEffect(() => {
@@ -58,9 +60,9 @@ const App: React.FC = () => {
             if (currentFretboard > 0 && prev.y === 0) {
               return {
                 ...prev,
-                currentFretboard: prev.currentFretboard-1,
-                y:5
-              }
+                currentFretboard: prev.currentFretboard - 1,
+                y: 5,
+              };
             }
             return { ...prev, y: prev.y === 0 ? 0 : prev.y - 1 };
           });
@@ -123,13 +125,13 @@ const App: React.FC = () => {
           key={i}
           id={i}
           tuning={tuning}
-          notes={notes}
+          notes={notes[i]}
         />
       );
     }
 
     return fretboards;
-  }, [numOfFretboards, tuning, notes, x, y,currentFretboard]);
+  }, [numOfFretboards, tuning, notes, x, y, currentFretboard]);
 
   return (
     <div className='App'>
