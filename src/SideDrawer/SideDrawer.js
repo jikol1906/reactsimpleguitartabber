@@ -8,10 +8,13 @@ function SideDrawer({ show }) {
     <nav className={sideDrawerClasses}>
       <ul>
         <li>
-          <a href='/'>Products</a>
+          <a href='/'>New Fretboard</a>
         </li>
         <li>
-          <a href='/'>Users</a>
+          <a href='/'>Remove Fretboard</a>
+        </li>
+        <li>
+          <a href='/'>Delete All Notes</a>
         </li>
       </ul>
     </nav>
