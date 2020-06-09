@@ -1,0 +1,38 @@
+.modal {
+  position: fixed;
+  box-sizing: border-box;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -250%);
+  transition: transform 0.3s ease-out;
+  background-color: white;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  height: 300px;
+  width: 300px;
+  z-index: 3;
+}
+
+.modal__button-container {
+  height: 30%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.modal__button-container button {
+  padding: 0.3em 1.6em;
+  background-color: white;
+  border-radius: 15px;
+  background-color: gray;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  font-size: 26px;
+}
+
+.modal__content {
+  height: 70%;
+  padding: 40px;
+  text-align: center;
+}
