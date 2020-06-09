@@ -57,43 +57,59 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const moveNoteSelectorUp = () => {
+      setNoteSelector((prev) => {
+        if (currentFretboard > 0 && prev.y === 0) {
+          return {
+            ...prev,
+            currentFretboard: prev.currentFretboard - 1,
+            y: 5,
+          };
+        }
+        return { ...prev, y: prev.y === 0 ? 0 : prev.y - 1 };
+      });
+    };
+
+    const moveNoteSelectorLeft = () => {
+      setNoteSelector((prev) => ({
+        ...prev,
+        x: prev.x === 1 ? 1 : prev.x - 1,
+      }));
+    };
+
+    const moveNoteSelectorDown = () => {
+      setNoteSelector((prev) => {
+        if (currentFretboard < numOfFretboards - 1 && prev.y === 5) {
+          return {
+            ...prev,
+            currentFretboard: prev.currentFretboard + 1,
+            y: 0,
+          };
+        }
+        return { ...prev, y: prev.y === 5 ? 5 : prev.y + 1 };
+      });
+    };
+
+    const moveNoteSelectorRight = () => {
+      setNoteSelector((prev) => ({
+        ...prev,
+        x: prev.x === 36 ? 36 : prev.x + 1,
+      }));
+    };
+
     const arrowKeyPressed = (e: KeyboardEvent) => {
       switch (e.key) {
         case 'ArrowUp':
-          setNoteSelector((prev) => {
-            if (currentFretboard > 0 && prev.y === 0) {
-              return {
-                ...prev,
-                currentFretboard: prev.currentFretboard - 1,
-                y: 5,
-              };
-            }
-            return { ...prev, y: prev.y === 0 ? 0 : prev.y - 1 };
-          });
+          moveNoteSelectorUp();
           break;
         case 'ArrowLeft':
-          setNoteSelector((prev) => ({
-            ...prev,
-            x: prev.x === 1 ? 1 : prev.x - 1,
-          }));
+          moveNoteSelectorLeft();
           break;
         case 'ArrowDown':
-          setNoteSelector((prev) => {
-            if (currentFretboard < numOfFretboards - 1 && prev.y === 5) {
-              return {
-                ...prev,
-                currentFretboard: prev.currentFretboard + 1,
-                y: 0,
-              };
-            }
-            return { ...prev, y: prev.y === 5 ? 5 : prev.y + 1 };
-          });
+          moveNoteSelectorDown();
           break;
         case 'ArrowRight':
-          setNoteSelector((prev) => ({
-            ...prev,
-            x: prev.x === 36 ? 36 : prev.x + 1,
-          }));
+          moveNoteSelectorRight();
           break;
         case 'Backspace':
           removeNote();
