@@ -39,8 +39,8 @@ const App: React.FC = () => {
   );
 
   const removeNote = useCallback(() => {
-    dispatchNotes({ type: 'REMOVE', x, y ,currentFretboard});
-  }, [x, y,currentFretboard]);
+    dispatchNotes({ type: 'REMOVE_NOTE', x, y, currentFretboard });
+  }, [x, y, currentFretboard]);
 
   const clearNotes = useCallback(() => {
     dispatchNotes({ type: 'CLEAR' ,numOfFretboards});
