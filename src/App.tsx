@@ -29,9 +29,13 @@ const App: React.FC = () => {
 
   const addNote = useCallback(
     (value: string) => {
-      dispatchNotes({ type: 'ADD', note: { x, y, value }, currentFretboard });
+      dispatchNotes({
+        type: 'ADD_NOTE',
+        note: { x, y, value },
+        currentFretboard,
+      });
     },
-    [x, y,currentFretboard]
+    [x, y, currentFretboard]
   );
 
   const removeNote = useCallback(() => {
