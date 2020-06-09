@@ -43,17 +43,17 @@ const App: React.FC = () => {
   }, [x, y, currentFretboard]);
 
   const clearNotes = useCallback(() => {
-    dispatchNotes({ type: 'CLEAR' ,numOfFretboards});
+    dispatchNotes({ type: 'CLEAR', numOfFretboards });
   }, [numOfFretboards]);
 
   const addFretBord = useCallback(() => {
     setNumOfFretboard((prev) => prev + 1);
-    dispatchNotes({type:'NEW_FRETBOARD'})
+    dispatchNotes({ type: 'NEW_FRETBOARD' });
   }, []);
 
   const removeFretBoard = useCallback(() => {
     setNumOfFretboard((prev) => (prev === 1 ? 1 : prev - 1));
-    dispatchNotes({type:'REMOVE_FRETBOARD'})
+    dispatchNotes({ type: 'REMOVE_FRETBOARD' });
   }, []);
 
   useEffect(() => {
@@ -119,23 +119,18 @@ const App: React.FC = () => {
     };
   }, [addNote, currentFretboard, numOfFretboards, removeNote]);
 
-  const fretboards = useMemo(() => {
-    const fretboards: JSX.Element[] = [];
+  const fretboards: JSX.Element[] = [];
 
-    for (let i = 0; i < numOfFretboards; i++) {
-      fretboards.push(
-        <Fretboard
-          noteSelectorPosition={currentFretboard === i ? { x, y } : null}
-          key={i}
-          id={i}
-          tuning={tuning}
-          notes={notes[i]}
-        />
-      );
-    }
-
-    return fretboards;
-  }, [numOfFretboards, tuning, notes, x, y, currentFretboard]);
+  for (let i = 0; i < numOfFretboards; i++) {
+    fretboards.push(
+      <Fretboard
+        noteSelectorPosition={currentFretboard === i ? { x, y } : null}
+        key={i}
+        tuning={tuning}
+        notes={notes[i]}
+      />
+    );
+  }
 
   return (
     <div className='App'>
