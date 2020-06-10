@@ -1,18 +1,22 @@
 import React from 'react';
-import './Modal.css'
+import './Modal.css';
 
-interface Props {}
+interface Props {
+    show:boolean,
+    handlers:{name:string,handler:() => any | void}[]
+}
 
-export const Modal: React.FC<Props> = () => {
+export const Modal: React.FC<Props> = ({ children,show, handlers }) => {
   return (
-    <div className="modal">
-        <div className="modal__content">
-            <h3>Delete all notes?</h3>
-        </div>
-        <div className="modal__button-container">
-            <button>Yes</button>
-            <button>No</button>
-        </div>
+    <div className={show ? 'modal show' : 'modal'}>
+      <div className='modal__content'>
+        {children}
+      </div>
+      <div className='modal__button-container'>
+        {handlers.map(({name,handler}) => 
+            <button key={name} onClick={handler}>{name}</button>
+        )}
+      </div>    
     </div>
   );
 };
