@@ -3,36 +3,38 @@
   box-sizing: border-box;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -250%);
+  min-width: 300px;
+  transform: translate(-50%, -1000px);
   transition: transform 0.3s ease-out;
   background-color: white;
   box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
-  height: 300px;
-  width: 300px;
-  z-index: 3;
+  z-index: 4;
+  font-size: 20px;
 }
 
 .modal__button-container {
-  height: 30%;
   display: flex;
   justify-content: space-around;
-  align-items: center;
 }
 
 .modal__button-container button {
-  padding: 0.3em 1.6em;
+  padding: 0.5em 1.6em;
+  margin: 1.5em;
   background-color: white;
   border-radius: 15px;
   background-color: gray;
   border: none;
   cursor: pointer;
   outline: none;
-  font-size: 26px;
+  font-size: 1em;
 }
 
 .modal__content {
-  height: 70%;
-  padding: 40px;
+  padding: 2em;
   text-align: center;
+}
+
+.modal.show {
+    transform: translate(-50%, -50%);
 }
