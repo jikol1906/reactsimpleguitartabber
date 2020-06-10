@@ -161,6 +161,10 @@ const App: React.FC = () => {
 
   return (
     <div className='App'>
+      <Modal show={modal.show} handlers={modal.handlers}>
+        <h2>{modal.header}</h2>
+        <p>{modal.content}</p>
+      </Modal>
       <Toolbar
         clearNotes={clearNotes}
         addFretBoard={addFretBord}
