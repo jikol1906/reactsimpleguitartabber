@@ -19,6 +19,17 @@ const App: React.FC = () => {
     y: 0,
     currentFretboard: 0,
   });
+  const [modal, setModal] = useState<{
+    show: boolean;
+    header: string;
+    content: string;
+    handlers: { name: string; handler: () => any }[];
+  }>({
+    show: false,
+    header: '',
+    content: '',
+    handlers: [],
+  });
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const [numOfFretboards, setNumOfFretboard] = useState(1);
   const [notes, dispatchNotes] = useReducer(notesReducer, [[]]);
