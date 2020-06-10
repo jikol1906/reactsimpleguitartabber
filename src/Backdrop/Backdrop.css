@@ -6,7 +6,6 @@
   left: 0;
   background-color: rgba(0, 0, 0, 0.3);
   z-index: 2;
-  transition: opacity 0.3s ease-out;
 }
 
 .backdrop.open {
