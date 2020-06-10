@@ -15,10 +15,17 @@ import { Modal } from './UI/Modal/Modal';
 
 const App: React.FC = () => {
   const [tuning, setTuning] = useState(['E', 'A', 'D', 'G', 'B', 'E']);
-  const [{ x, y, currentFretboard }, setNoteSelector] = useState({
+  const [
+    { x, y, currentFretboard, extendUp, extendDown, extendLeft, extendRight },
+    setNoteSelector,
+  ] = useState({
     x: 1,
     y: 0,
     currentFretboard: 0,
+    extendUp: 0,
+    extendDown: 0,
+    extendLeft: 0,
+    extendRight: 0,
   });
   const [modal, setModal] = useState<{
     show: boolean;
@@ -37,6 +44,11 @@ const App: React.FC = () => {
 
   const drawerToggleClickHandler = () => {
     setSideDrawerOpen((prev) => !prev);
+  };
+
+  const backDropClickHandler = () => {
+    setSideDrawerOpen(false);
+    setModal((prev) => ({ ...prev, show: false }));
   };
 
   const addNote = useCallback(
@@ -193,8 +205,8 @@ const App: React.FC = () => {
         drawerToggleClickHandler={drawerToggleClickHandler}
       />
       <SideDrawer show={sideDrawerOpen} />
-      {sideDrawerOpen && (
-        <Backdrop drawerToggleClickHandler={drawerToggleClickHandler} />
+      {(sideDrawerOpen || modal.show) && (
+        <Backdrop backDropClickhandler={backDropClickHandler} />
       )}
       <main style={{ marginTop: '100px' }}>{fretboards}</main>
     </div>

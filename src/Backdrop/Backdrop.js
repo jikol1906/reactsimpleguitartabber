@@ -1,10 +1,10 @@
 import React from 'react';
 import './Backdrop.css';
 
-function Backdrop({ drawerToggleClickHandler }) {
+function Backdrop({ backDropClickhandler }) {
   return (
     <div  
-      onClick={drawerToggleClickHandler}
+      onClick={backDropClickhandler}
       className="backdrop"
     />
   );
