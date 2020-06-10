@@ -11,6 +11,7 @@ import Toolbar from './Toolbar/Toolbar';
 import SideDrawer from './SideDrawer/SideDrawer';
 import Backdrop from './Backdrop/Backdrop';
 import notesReducer from './Reducers/notes-reducer';
+import { Modal } from './UI/Modal/Modal';
 
 const App: React.FC = () => {
   const [tuning, setTuning] = useState(['E', 'A', 'D', 'G', 'B', 'E']);
@@ -55,7 +56,26 @@ const App: React.FC = () => {
 
   const clearNotes = useCallback(() => {
     dispatchNotes({ type: 'CLEAR', numOfFretboards });
+    setModal((prev) => ({
+      ...prev,
+      show: false,
+    }));
   }, [numOfFretboards]);
+
+  const clearNotesClickHandler = () => {
+    setModal({
+      show: true,
+      header: 'Delete all notes?',
+      content: 'This cannnot be undone',
+      handlers: [
+        { name: 'Yes', handler: clearNotes },
+        {
+          name: 'No',
+          handler: () => setModal((prev) => ({ ...prev, show: false })),
+        },
+      ],
+    });
+  };
 
   const addFretBord = useCallback(() => {
     setNumOfFretboard((prev) => prev + 1);
@@ -166,7 +186,7 @@ const App: React.FC = () => {
         <p>{modal.content}</p>
       </Modal>
       <Toolbar
-        clearNotes={clearNotes}
+        clearNotes={clearNotesClickHandler}
         addFretBoard={addFretBord}
         removeFretBoard={removeFretBoard}
         addNote={addNote}
