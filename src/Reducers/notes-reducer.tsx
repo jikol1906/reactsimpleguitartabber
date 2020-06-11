@@ -2,12 +2,25 @@ import INote from '../Models/INotes';
 
 type Actions =
   | { type: 'ADD_NOTE'; note: INote; currentFretboard: number }
-  | { type: 'REMOVE_NOTE'; x: number; y: number; currentFretboard: number }
+  | {
+      type: 'REMOVE_NOTE';
+      x: number;
+      y: number;
+      currentFretboard: number;
+      extendDown: number;
+      extendRight: number;
+    }
   | { type: 'NEW_FRETBOARD' }
   | { type: 'REMOVE_FRETBOARD' }
   | { type: 'CLEAR'; numOfFretboards: number };
 
-function removeNoteFromArr(state: INote[], x: number, y: number): INote[] {
+function removeNoteFromArr(
+  state: INote[],
+  x: number,
+  y: number,
+  extendDown: number = 0,
+  extendRight: number = 0
+): INote[] {
   return state.filter((n) => !(n.x === x && n.y === y));
 }
 
@@ -42,7 +55,13 @@ export default (state: INote[][], action: Actions): INote[][] => {
     case 'REMOVE_NOTE':
       return state.map((arr, i) =>
         i === action.currentFretboard
-          ? removeNoteFromArr(arr, action.x, action.y)
+          ? removeNoteFromArr(
+              arr,
+              action.x,
+              action.y,
+              action.extendDown,
+              action.extendRight
+            )
           : arr
       );
     case 'CLEAR':
