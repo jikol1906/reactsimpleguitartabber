@@ -17,7 +17,7 @@ import noteselectorReducer from './Reducers/noteselector-reducer';
 const App: React.FC = () => {
   const [tuning, setTuning] = useState(['E', 'A', 'D', 'G', 'B', 'E']);
   const [
-    { x, y, currentFretboard, extendDown, extendRight},
+    { x, y, currentFretboard, extendDown, extendRight },
     dispatchNoteselector,
   ] = useReducer(noteselectorReducer, {
     x: 1,
@@ -154,9 +154,7 @@ const App: React.FC = () => {
     fretboards.push(
       <Fretboard
         noteSelectorPosition={
-          currentFretboard === i
-            ? { x, y, extendDown, extendRight }
-            : null
+          currentFretboard === i ? { x, y, extendDown, extendRight } : null
         }
         key={i}
         tuning={tuning}

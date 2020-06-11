@@ -36,6 +36,8 @@ const Fretboard: React.FC<Props> = ({
           <div
             style={{
               transform: `translate(${noteSelectorPosition.x}em,${noteSelectorPosition.y}em)`,
+              height : noteSelectorPosition.extendDown ? `${noteSelectorPosition.extendDown+1}em` : '1em',
+              width : noteSelectorPosition.extendRight ? `${noteSelectorPosition.extendRight+1}em` : '1em'
             }}
             className='fretboard__note-selector'
           ></div>
