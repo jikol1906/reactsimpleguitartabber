@@ -1,4 +1,5 @@
 import INote from '../Models/INotes';
+import { range } from '../Util/Utils';
 
 type Actions =
   | { type: 'ADD_NOTE'; note: INote; currentFretboard: number }
@@ -21,7 +22,12 @@ function removeNoteFromArr(
   extendDown: number = 0,
   extendRight: number = 0
 ): INote[] {
-  return state.filter((n) => !(n.x === x && n.y === y));
+  return state.filter((n) => {
+    const isInXRange = range(x, x + extendRight).includes(n.x);
+    const isInYRange = range(y, y + extendDown).includes(n.y);
+
+    return !(isInXRange && isInYRange);
+  });
 }
 
 function findNote(state: INote[], note: INote): INote | undefined {
@@ -35,13 +41,18 @@ export default (state: INote[][], action: Actions): INote[][] => {
         if (i === action.currentFretboard) {
           const existingNote = findNote(arr, action.note); //check if there is already a note at this location
           if (existingNote) {
-            const removedExistingNote = removeNoteFromArr(arr, existingNote.x, existingNote.y); //Remove note from state
-            const noteCopy = {...existingNote} //Copy existing note to not mutate state
-            if(noteCopy.value.length < 2) { //If length of existing note is only one, append value of newly added note
-              noteCopy.value += action.note.value
-              return [...removedExistingNote,noteCopy]
+            const removedExistingNote = removeNoteFromArr(
+              arr,
+              existingNote.x,
+              existingNote.y
+            ); //Remove note from state
+            const noteCopy = { ...existingNote }; //Copy existing note to not mutate state
+            if (noteCopy.value.length < 2) {
+              //If length of existing note is only one, append value of newly added note
+              noteCopy.value += action.note.value;
+              return [...removedExistingNote, noteCopy];
             }
-            return [...removedExistingNote,action.note] 
+            return [...removedExistingNote, action.note];
           }
           return [...arr, action.note];
         }
