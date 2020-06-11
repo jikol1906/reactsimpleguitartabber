@@ -4,15 +4,18 @@ type Actions =
   | { type: 'MOVE_DOWN'; numOfFretboards: number }
   | { type: 'MOVE_UP' }
   | { type: 'MOVE_LEFT' }
-  | { type: 'MOVE_RIGHT' };
+  | { type: 'MOVE_RIGHT' }
+  | { type: 'EXTEND_DOWN' }
+  | { type: 'EXTEND_UP' }
+  | { type: 'EXTEND_LEFT' }
+  | { type: 'EXTEND_RIGHT' }
+  | { type: 'CLEAR_EXTEND' };
 
 interface State {
   x: number;
   y: number;
   currentFretboard: number;
-  extendUp: number;
   extendDown: number;
-  extendLeft: number;
   extendRight: number;
 }
 
@@ -48,6 +51,16 @@ const moveNoteSelectorRight = (state: State): State => ({
   x: state.x === 36 ? 36 : state.x + 1,
 });
 
+const extendNoteSelectorDown = (state: State) : State => {
+    return { ...state, extendDown: state.extendDown + 1 }
+}
+
+const extendNoteSelectorRight = (state: State) : State => {
+    return { ...state, extendRight: state.extendRight + 1 }
+}
+
+
+
 export default (state: State, action: Actions): State => {
   switch (action.type) {
     case 'MOVE_DOWN':
@@ -58,6 +71,20 @@ export default (state: State, action: Actions): State => {
       return moveNoteSelectorLeft(state);
     case 'MOVE_RIGHT':
       return moveNoteSelectorRight(state);
+    case 'EXTEND_DOWN':
+      return extendNoteSelectorDown(state);
+    case 'EXTEND_UP':
+      return extendNoteSelectorDown(moveNoteSelectorUp(state));
+    case 'EXTEND_LEFT':
+      return extendNoteSelectorRight(moveNoteSelectorLeft(state))
+    case 'EXTEND_RIGHT':
+      return extendNoteSelectorRight(state);    
+    case 'CLEAR_EXTEND':
+      return {
+        ...state,
+        extendRight: 0,
+        extendDown: 0,
+      };
     default:
       return state;
   }

@@ -8,34 +8,41 @@ import { Notes } from './Notes/Notes';
 interface Props {
   tuning: string[];
   notes: INote[];
-  noteSelectorPosition?: { x: number; y: number } | null;
+  noteSelectorPosition: {
+    x: number;
+    y: number;
+    extendDown: number;
+    extendRight: number;
+  } | null;
 }
 
-const Fretboard: React.FC<Props> = React.memo(
-  ({ tuning, notes, noteSelectorPosition }) => {
-    return (
-      <div>
-        <div className='wrapper'>
-          <div className='string'></div>
-          <div className='string'></div>
-          <div className='string'></div>
-          <div className='string'></div>
-          <div className='string'></div>
-          <div className='string'></div>
-          <Tuning tuning={tuning} />
-          <Notes notes={notes}/>
-          {noteSelectorPosition && (
-            <div
-              style={{
-                transform: `translate(${noteSelectorPosition.x}em,${noteSelectorPosition.y}em)`,
-              }}
-              className='fretboard__note-selector'
-            ></div>
-          )}
-        </div>
+const Fretboard: React.FC<Props> = ({
+  tuning,
+  notes,
+  noteSelectorPosition,
+}) => {
+  return (
+    <div>
+      <div className='wrapper'>
+        <div className='string'></div>
+        <div className='string'></div>
+        <div className='string'></div>
+        <div className='string'></div>
+        <div className='string'></div>
+        <div className='string'></div>
+        <Tuning tuning={tuning} />
+        <Notes notes={notes} />
+        {noteSelectorPosition && (
+          <div
+            style={{
+              transform: `translate(${noteSelectorPosition.x}em,${noteSelectorPosition.y}em)`,
+            }}
+            className='fretboard__note-selector'
+          ></div>
+        )}
       </div>
-    );
-  }
-);
+    </div>
+  );
+};
 
 export default Fretboard;

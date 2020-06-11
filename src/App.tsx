@@ -17,15 +17,13 @@ import noteselectorReducer from './Reducers/noteselector-reducer';
 const App: React.FC = () => {
   const [tuning, setTuning] = useState(['E', 'A', 'D', 'G', 'B', 'E']);
   const [
-    { x, y, currentFretboard, extendUp, extendDown, extendLeft, extendRight },
+    { x, y, currentFretboard, extendDown, extendRight},
     dispatchNoteselector,
   ] = useReducer(noteselectorReducer, {
     x: 1,
     y: 0,
     currentFretboard: 0,
-    extendUp: 0,
     extendDown: 0,
-    extendLeft: 0,
     extendRight: 0,
   });
   const [modal, setModal] = useState<{
@@ -101,23 +99,33 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-
     const arrowKeyPressed = (e: KeyboardEvent) => {
       switch (e.key) {
         case 'ArrowUp':
-          dispatchNoteselector({type:'MOVE_UP'})
+          e.shiftKey
+            ? dispatchNoteselector({ type: 'EXTEND_UP' })
+            : dispatchNoteselector({ type: 'MOVE_UP' });
           break;
         case 'ArrowLeft':
-          dispatchNoteselector({type:'MOVE_LEFT'})
+          e.shiftKey
+            ? dispatchNoteselector({ type: 'EXTEND_LEFT' })
+            : dispatchNoteselector({ type: 'MOVE_LEFT' });
           break;
         case 'ArrowDown':
-          dispatchNoteselector({type:'MOVE_DOWN', numOfFretboards})
+          e.shiftKey
+            ? dispatchNoteselector({ type: 'EXTEND_DOWN' })
+            : dispatchNoteselector({ type: 'MOVE_DOWN', numOfFretboards });
           break;
         case 'ArrowRight':
-          dispatchNoteselector({type:'MOVE_RIGHT'})
+          e.shiftKey
+            ? dispatchNoteselector({ type: 'EXTEND_RIGHT' })
+            : dispatchNoteselector({ type: 'MOVE_RIGHT' });
           break;
         case 'Backspace':
           removeNote();
+          break;
+        case 'Escape':
+          dispatchNoteselector({ type: 'CLEAR_EXTEND' });
           break;
         default:
           if (/[0-9]/.test(e.key)) {
@@ -145,7 +153,11 @@ const App: React.FC = () => {
   for (let i = 0; i < numOfFretboards; i++) {
     fretboards.push(
       <Fretboard
-        noteSelectorPosition={currentFretboard === i ? { x, y } : null}
+        noteSelectorPosition={
+          currentFretboard === i
+            ? { x, y, extendDown, extendRight }
+            : null
+        }
         key={i}
         tuning={tuning}
         notes={notes[i]}
