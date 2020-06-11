@@ -12,13 +12,14 @@ import SideDrawer from './SideDrawer/SideDrawer';
 import Backdrop from './Backdrop/Backdrop';
 import notesReducer from './Reducers/notes-reducer';
 import { Modal } from './UI/Modal/Modal';
+import noteselectorReducer from './Reducers/noteselector-reducer';
 
 const App: React.FC = () => {
   const [tuning, setTuning] = useState(['E', 'A', 'D', 'G', 'B', 'E']);
   const [
     { x, y, currentFretboard, extendUp, extendDown, extendLeft, extendRight },
-    setNoteSelector,
-  ] = useState({
+    dispatchNoteselector,
+  ] = useReducer(noteselectorReducer, {
     x: 1,
     y: 0,
     currentFretboard: 0,
@@ -100,59 +101,20 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const moveNoteSelectorUp = () => {
-      setNoteSelector((prev) => {
-        if (currentFretboard > 0 && prev.y === 0) {
-          return {
-            ...prev,
-            currentFretboard: prev.currentFretboard - 1,
-            y: 5,
-          };
-        }
-        return { ...prev, y: prev.y === 0 ? 0 : prev.y - 1 };
-      });
-    };
-
-    const moveNoteSelectorLeft = () => {
-      setNoteSelector((prev) => ({
-        ...prev,
-        x: prev.x === 1 ? 1 : prev.x - 1,
-      }));
-    };
-
-    const moveNoteSelectorDown = () => {
-      setNoteSelector((prev) => {
-        if (currentFretboard < numOfFretboards - 1 && prev.y === 5) {
-          return {
-            ...prev,
-            currentFretboard: prev.currentFretboard + 1,
-            y: 0,
-          };
-        }
-        return { ...prev, y: prev.y === 5 ? 5 : prev.y + 1 };
-      });
-    };
-
-    const moveNoteSelectorRight = () => {
-      setNoteSelector((prev) => ({
-        ...prev,
-        x: prev.x === 36 ? 36 : prev.x + 1,
-      }));
-    };
 
     const arrowKeyPressed = (e: KeyboardEvent) => {
       switch (e.key) {
         case 'ArrowUp':
-          moveNoteSelectorUp();
+          dispatchNoteselector({type:'MOVE_UP'})
           break;
         case 'ArrowLeft':
-          moveNoteSelectorLeft();
+          dispatchNoteselector({type:'MOVE_LEFT'})
           break;
         case 'ArrowDown':
-          moveNoteSelectorDown();
+          dispatchNoteselector({type:'MOVE_DOWN', numOfFretboards})
           break;
         case 'ArrowRight':
-          moveNoteSelectorRight();
+          dispatchNoteselector({type:'MOVE_RIGHT'})
           break;
         case 'Backspace':
           removeNote();
