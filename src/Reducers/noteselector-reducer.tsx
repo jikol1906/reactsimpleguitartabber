@@ -51,15 +51,22 @@ const moveNoteSelectorRight = (state: State): State => ({
   x: state.x === 36 ? 36 : state.x + 1,
 });
 
-const extendNoteSelectorDown = (state: State) : State => {
-    return { ...state, extendDown: state.extendDown + 1 }
-}
+const extendNoteSelectorDown = (state: State): State => {
+  const canExtendDown = state.y + state.extendDown + 1 <= 5;
+  return {
+    ...state,
+    extendDown: canExtendDown ? state.extendDown + 1 : state.extendDown,
+  };
+};
 
-const extendNoteSelectorRight = (state: State) : State => {
-    return { ...state, extendRight: state.extendRight + 1 }
-}
-
-
+const extendNoteSelectorRight = (state: State): State => {
+  const canExtendLeft = state.x + state.extendRight + 1 <= 36;
+  return {
+    ...state,
+    extendRight: canExtendLeft ? state.extendRight + 1 : state.extendRight,
+  };
+  
+};
 
 export default (state: State, action: Actions): State => {
   switch (action.type) {
@@ -76,9 +83,9 @@ export default (state: State, action: Actions): State => {
     case 'EXTEND_UP':
       return extendNoteSelectorDown(moveNoteSelectorUp(state));
     case 'EXTEND_LEFT':
-      return extendNoteSelectorRight(moveNoteSelectorLeft(state))
+      return extendNoteSelectorRight(moveNoteSelectorLeft(state));
     case 'EXTEND_RIGHT':
-      return extendNoteSelectorRight(state);    
+      return extendNoteSelectorRight(state);
     case 'CLEAR_EXTEND':
       return {
         ...state,
