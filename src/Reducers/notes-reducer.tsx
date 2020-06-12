@@ -23,9 +23,8 @@ function removeNoteFromArr(
   extendRight: number = 0
 ): INote[] {
   return state.filter((n) => {
-    const isInXRange = range(x, x + extendRight).includes(n.x);
-    const isInYRange = range(y, y + extendDown).includes(n.y);
-
+    const isInXRange = n.x >= x && n.x <= x + extendRight;
+    const isInYRange = n.y >= y && n.y <= y + extendDown;
     return !(isInXRange && isInYRange);
   });
 }
