@@ -1,14 +1,32 @@
 import INote from '../Models/INotes';
+import { range } from '../Util/Utils';
 
 type Actions =
   | { type: 'ADD_NOTE'; note: INote; currentFretboard: number }
-  | { type: 'REMOVE_NOTE'; x: number; y: number; currentFretboard: number }
+  | {
+      type: 'REMOVE_NOTE';
+      x: number;
+      y: number;
+      currentFretboard: number;
+      extendDown: number;
+      extendRight: number;
+    }
   | { type: 'NEW_FRETBOARD' }
   | { type: 'REMOVE_FRETBOARD' }
   | { type: 'CLEAR'; numOfFretboards: number };
 
-function removeNoteFromArr(state: INote[], x: number, y: number): INote[] {
-  return state.filter((n) => !(n.x === x && n.y === y));
+function removeNoteFromArr(
+  state: INote[],
+  x: number,
+  y: number,
+  extendDown: number = 0,
+  extendRight: number = 0
+): INote[] {
+  return state.filter((n) => {
+    const isInXRange = n.x >= x && n.x <= x + extendRight;
+    const isInYRange = n.y >= y && n.y <= y + extendDown;
+    return !(isInXRange && isInYRange);
+  });
 }
 
 function findNote(state: INote[], note: INote): INote | undefined {
@@ -22,13 +40,18 @@ export default (state: INote[][], action: Actions): INote[][] => {
         if (i === action.currentFretboard) {
           const existingNote = findNote(arr, action.note); //check if there is already a note at this location
           if (existingNote) {
-            const removedExistingNote = removeNoteFromArr(arr, existingNote.x, existingNote.y); //Remove note from state
-            const noteCopy = {...existingNote} //Copy existing note to not mutate state
-            if(noteCopy.value.length < 2) { //If length of existing note is only one, append value of newly added note
-              noteCopy.value += action.note.value
-              return [...removedExistingNote,noteCopy]
+            const removedExistingNote = removeNoteFromArr(
+              arr,
+              existingNote.x,
+              existingNote.y
+            ); //Remove note from state
+            const noteCopy = { ...existingNote }; //Copy existing note to not mutate state
+            if (noteCopy.value.length < 2) {
+              //If length of existing note is only one, append value of newly added note
+              noteCopy.value += action.note.value;
+              return [...removedExistingNote, noteCopy];
             }
-            return [...removedExistingNote,action.note] 
+            return [...removedExistingNote, action.note];
           }
           return [...arr, action.note];
         }
@@ -42,7 +65,13 @@ export default (state: INote[][], action: Actions): INote[][] => {
     case 'REMOVE_NOTE':
       return state.map((arr, i) =>
         i === action.currentFretboard
-          ? removeNoteFromArr(arr, action.x, action.y)
+          ? removeNoteFromArr(
+              arr,
+              action.x,
+              action.y,
+              action.extendDown,
+              action.extendRight
+            )
           : arr
       );
     case 'CLEAR':
