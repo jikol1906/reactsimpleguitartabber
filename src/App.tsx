@@ -13,6 +13,7 @@ import Backdrop from './Backdrop/Backdrop';
 import notesReducer from './Reducers/notes-reducer';
 import { Modal } from './UI/Modal/Modal';
 import noteselectorReducer from './Reducers/noteselector-reducer';
+import { useModal } from './UI/Modal/useModal';
 
 const App: React.FC = () => {
   const [tuning, setTuning] = useState(['E', 'A', 'D', 'G', 'B', 'E']);
@@ -26,17 +27,7 @@ const App: React.FC = () => {
     extendDown: 0,
     extendRight: 0,
   });
-  const [modal, setModal] = useState<{
-    show: boolean;
-    header: string;
-    content: string;
-    handlers: { name: string; handler: () => any }[];
-  }>({
-    show: false,
-    header: '',
-    content: '',
-    handlers: [],
-  });
+  const { modal, closeModal, openModal } = useModal();
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
   const [numOfFretboards, setNumOfFretboard] = useState(1);
   const [notes, dispatchNotes] = useReducer(notesReducer, [[]]);
@@ -49,11 +40,7 @@ const App: React.FC = () => {
     setSideDrawerOpen(false);
     closeModal();
   };
-
-  const closeModal = () => {
-    setModal((prev) => ({ ...prev, show: false }));
-  };
-
+  
   const addNote = useCallback(
     (value: string) => {
       dispatchNotes({
@@ -66,30 +53,29 @@ const App: React.FC = () => {
   );
 
   const removeNote = useCallback(() => {
-    dispatchNotes({ type: 'REMOVE_NOTE', x, y, currentFretboard,extendDown,extendRight });
-  }, [x, y, currentFretboard,extendDown,extendRight]);
+    dispatchNotes({
+      type: 'REMOVE_NOTE',
+      x,
+      y,
+      currentFretboard,
+      extendDown,
+      extendRight,
+    });
+  }, [x, y, currentFretboard, extendDown, extendRight]);
 
   const clearNotes = useCallback(() => {
     dispatchNotes({ type: 'CLEAR', numOfFretboards });
-    setModal((prev) => ({
-      ...prev,
-      show: false,
-    }));
+    closeModal();
   }, [numOfFretboards]);
 
   const clearNotesClickHandler = () => {
-    setModal({
-      show: true,
-      header: 'Delete all notes?',
-      content: 'This cannnot be undone',
-      handlers: [
-        { name: 'Yes', handler: clearNotes },
-        {
-          name: 'No',
-          handler: closeModal,
-        },
-      ],
-    });
+    openModal('Delete all notes?', 'This cannnot be undone', [
+      { name: 'Yes', handler: clearNotes },
+      {
+        name: 'No',
+        handler: closeModal,
+      },
+    ]);
   };
 
   const addFretBord = useCallback(() => {
@@ -101,19 +87,14 @@ const App: React.FC = () => {
     setNumOfFretboard((prev) => (prev === 1 ? 1 : prev - 1));
     dispatchNotes({ type: 'REMOVE_FRETBOARD' });
     closeModal();
-  }, []);
+  }, [closeModal]);
 
   const removeFretboardClickHandler = useCallback(() => {
     if (numOfFretboards !== 1 && notes[numOfFretboards - 1].length > 0) {
-      setModal({
-        show: true,
-        header: 'Delete fretboard?',
-        content: 'Fretboard has notes, delete anyway?',
-        handlers: [
-          { name: 'Yes', handler: removeFretBoard },
-          { name: 'No', handler: closeModal },
-        ],
-      });
+      openModal('Delete fretboard?','Fretboard has notes, delete anyway?',[
+        { name: 'Yes', handler: removeFretBoard },
+        { name: 'No', handler: closeModal },
+      ])
     } else {
       removeFretBoard();
     }
