@@ -47,6 +47,10 @@ const App: React.FC = () => {
 
   const backDropClickHandler = () => {
     setSideDrawerOpen(false);
+    closeModal();
+  };
+
+  const closeModal = () => {
     setModal((prev) => ({ ...prev, show: false }));
   };
 
@@ -82,7 +86,7 @@ const App: React.FC = () => {
         { name: 'Yes', handler: clearNotes },
         {
           name: 'No',
-          handler: () => setModal((prev) => ({ ...prev, show: false })),
+          handler: closeModal,
         },
       ],
     });
