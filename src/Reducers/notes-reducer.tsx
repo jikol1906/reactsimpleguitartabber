@@ -1,5 +1,4 @@
 import INote from '../Models/INotes';
-import { range } from '../Util/Utils';
 
 type Actions =
   | { type: 'ADD_NOTE'; note: INote; currentFretboard: number }
@@ -13,7 +12,7 @@ type Actions =
     }
   | { type: 'NEW_FRETBOARD' }
   | { type: 'REMOVE_FRETBOARD' }
-  | { type: 'CLEAR'; numOfFretboards: number };
+  | { type: 'CLEAR' };
 
 function removeNoteFromArr(
   state: INote[],
@@ -77,7 +76,7 @@ export default (state: INote[][], action: Actions): INote[][] => {
     case 'CLEAR':
       const numOfFretboards: INote[][] = [];
 
-      for (let i = 0; i < action.numOfFretboards; i++) {
+      for (let i = 0; i < state.length; i++) {
         numOfFretboards.push([]);
       }
 

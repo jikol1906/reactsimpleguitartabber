@@ -29,7 +29,6 @@ const App: React.FC = () => {
   });
   const { modal, closeModal, openModal } = useModal();
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
-  const [numOfFretboards, setNumOfFretboard] = useState(1);
   const [notes, dispatchNotes] = useReducer(notesReducer, [[]]);
 
   const drawerToggleClickHandler = () => {
@@ -64,9 +63,9 @@ const App: React.FC = () => {
   }, [x, y, currentFretboard, extendDown, extendRight]);
 
   const clearNotes = useCallback(() => {
-    dispatchNotes({ type: 'CLEAR', numOfFretboards });
+    dispatchNotes({ type: 'CLEAR'});
     closeModal();
-  }, [numOfFretboards]);
+  }, [closeModal]);
 
   const clearNotesClickHandler = () => {
     openModal('Delete all notes?', 'This cannnot be undone', [
@@ -79,18 +78,16 @@ const App: React.FC = () => {
   };
 
   const addFretBord = useCallback(() => {
-    setNumOfFretboard((prev) => prev + 1);
     dispatchNotes({ type: 'NEW_FRETBOARD' });
   }, []);
 
   const removeFretBoard = useCallback(() => {
-    setNumOfFretboard((prev) => (prev === 1 ? 1 : prev - 1));
     dispatchNotes({ type: 'REMOVE_FRETBOARD' });
     closeModal();
   }, [closeModal]);
 
   const removeFretboardClickHandler = useCallback(() => {
-    if (numOfFretboards !== 1 && notes[numOfFretboards - 1].length > 0) {
+    if (notes.length !== 1 && notes[notes.length - 1].length > 0) {
       openModal('Delete fretboard?','Fretboard has notes, delete anyway?',[
         { name: 'Yes', handler: removeFretBoard },
         { name: 'No', handler: closeModal },
@@ -98,7 +95,7 @@ const App: React.FC = () => {
     } else {
       removeFretBoard();
     }
-  }, [notes, numOfFretboards, removeFretBoard]);
+  }, [closeModal, notes, openModal, removeFretBoard]);
 
   useEffect(() => {
     const arrowKeyPressed = (e: KeyboardEvent) => {
@@ -116,7 +113,7 @@ const App: React.FC = () => {
         case 'ArrowDown':
           e.shiftKey
             ? dispatchNoteselector({ type: 'EXTEND_DOWN' })
-            : dispatchNoteselector({ type: 'MOVE_DOWN', numOfFretboards });
+            : dispatchNoteselector({ type: 'MOVE_DOWN', numOfFretboards : notes.length });
           break;
         case 'ArrowRight':
           e.shiftKey
@@ -148,11 +145,11 @@ const App: React.FC = () => {
       document.removeEventListener('keydown', arrowKeyPressed);
       window.removeEventListener('keydown', preventScrolling);
     };
-  }, [addNote, currentFretboard, numOfFretboards, removeNote]);
+  }, [addNote, currentFretboard, removeNote]);
 
   const fretboards: JSX.Element[] = [];
 
-  for (let i = 0; i < numOfFretboards; i++) {
+  for (let i = 0; i < notes.length; i++) {
     fretboards.push(
       <Fretboard
         noteSelectorPosition={
