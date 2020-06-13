@@ -161,6 +161,7 @@ const App: React.FC = () => {
   for (let i = 0; i < notes.length; i++) {
     fretboards.push(
       <Fretboard
+        click={() => dispatchNoteselector({type:'MOVE_TO_FRET',fretNumber:i})}
         noteSelectorPosition={
           currentFretboard === i ? { x, y, extendDown, extendRight } : null
         }

@@ -14,35 +14,39 @@ interface Props {
     extendDown: number;
     extendRight: number;
   } | null;
+  click : () => void
 }
 
 const Fretboard: React.FC<Props> = ({
   tuning,
   notes,
   noteSelectorPosition,
+  click: moveNoteSelectorToThisFret
 }) => {
   return (
-    <div>
-      <div className='wrapper'>
-        <div className='string'></div>
-        <div className='string'></div>
-        <div className='string'></div>
-        <div className='string'></div>
-        <div className='string'></div>
-        <div className='string'></div>
-        <Tuning tuning={tuning} />
-        <Notes notes={notes} />
-        {noteSelectorPosition && (
-          <div
-            style={{
-              transform: `translate(${noteSelectorPosition.x}em,${noteSelectorPosition.y}em)`,
-              height : noteSelectorPosition.extendDown ? `${noteSelectorPosition.extendDown+1}em` : '1em',
-              width : noteSelectorPosition.extendRight ? `${noteSelectorPosition.extendRight+1}em` : '1em'
-            }}
-            className='fretboard__note-selector'
-          ></div>
-        )}
-      </div>
+    <div className='wrapper' onClick={moveNoteSelectorToThisFret}>
+      <div className='string'></div>
+      <div className='string'></div>
+      <div className='string'></div>
+      <div className='string'></div>
+      <div className='string'></div>
+      <div className='string'></div>
+      <Tuning tuning={tuning} />
+      <Notes notes={notes} />
+      {noteSelectorPosition && (
+        <div
+          style={{
+            transform: `translate(${noteSelectorPosition.x}em,${noteSelectorPosition.y}em)`,
+            height: noteSelectorPosition.extendDown
+              ? `${noteSelectorPosition.extendDown + 1}em`
+              : '1em',
+            width: noteSelectorPosition.extendRight
+              ? `${noteSelectorPosition.extendRight + 1}em`
+              : '1em',
+          }}
+          className='fretboard__note-selector'
+        ></div>
+      )}
     </div>
   );
 };
