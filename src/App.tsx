@@ -100,7 +100,24 @@ const App: React.FC = () => {
   const removeFretBoard = useCallback(() => {
     setNumOfFretboard((prev) => (prev === 1 ? 1 : prev - 1));
     dispatchNotes({ type: 'REMOVE_FRETBOARD' });
+    closeModal();
   }, []);
+
+  const removeFretboardClickHandler = useCallback(() => {
+    if (numOfFretboards !== 1 && notes[numOfFretboards - 1].length > 0) {
+      setModal({
+        show: true,
+        header: 'Delete fretboard?',
+        content: 'Fretboard has notes, delete anyway?',
+        handlers: [
+          { name: 'Yes', handler: removeFretBoard },
+          { name: 'No', handler: closeModal },
+        ],
+      });
+    } else {
+      removeFretBoard();
+    }
+  }, [notes, numOfFretboards, removeFretBoard]);
 
   useEffect(() => {
     const arrowKeyPressed = (e: KeyboardEvent) => {
@@ -176,7 +193,7 @@ const App: React.FC = () => {
       <Toolbar
         clearNotes={clearNotesClickHandler}
         addFretBoard={addFretBord}
-        removeFretBoard={removeFretBoard}
+        removeFretBoard={removeFretboardClickHandler}
         addNote={addNote}
         drawerToggleClickHandler={drawerToggleClickHandler}
       />
