@@ -9,7 +9,9 @@ type Actions =
   | { type: 'EXTEND_UP' }
   | { type: 'EXTEND_LEFT' }
   | { type: 'EXTEND_RIGHT' }
-  | { type: 'CLEAR_EXTEND' };
+  | { type: 'CLEAR_EXTEND' }
+  | { type: 'COPY_NOTES', notes: INote[]}
+  | { type: 'MOVE_TO_FRET', fretNumber:number};
 
 interface State {
   x: number;
@@ -68,6 +70,9 @@ const extendNoteSelectorRight = (state: State): State => {
   
 };
 
+const moveToFretboard = (state:State,fretNumber:number) => {
+  return {...state,currentFretboard:fretNumber}
+}
 export default (state: State, action: Actions): State => {
   switch (action.type) {
     case 'MOVE_DOWN':
@@ -86,6 +91,8 @@ export default (state: State, action: Actions): State => {
       return extendNoteSelectorRight(moveNoteSelectorLeft(state));
     case 'EXTEND_RIGHT':
       return extendNoteSelectorRight(state);
+    case 'MOVE_TO_FRET':
+      return moveToFretboard(state,action.fretNumber)
     case 'CLEAR_EXTEND':
       return {
         ...state,

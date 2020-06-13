@@ -82,7 +82,16 @@ const App: React.FC = () => {
   }, []);
 
   const removeFretBoard = useCallback(() => {
+
+    const noteSelectorIsAtLastFretboard = currentFretboard === notes.length - 1;
+    const isOnlyOneFret = notes.length === 1
+    
+    if(!isOnlyOneFret && noteSelectorIsAtLastFretboard) {
+      dispatchNoteselector({type:'MOVE_TO_FRET',fretNumber : notes.length - 2})
+    }
+
     dispatchNotes({ type: 'REMOVE_FRETBOARD' });
+
     closeModal();
   }, [closeModal]);
 
