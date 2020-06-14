@@ -12,7 +12,8 @@ type Actions =
     }
   | { type: 'NEW_FRETBOARD' }
   | { type: 'REMOVE_FRETBOARD' }
-  | { type: 'CLEAR' };
+  | { type: 'CLEAR' }
+  | { type: 'SET', notes: INote[][]};
 
 function removeNoteFromArr(
   state: INote[],
@@ -81,6 +82,8 @@ export default (state: INote[][], action: Actions): INote[][] => {
       }
 
       return numOfFretboards;
+    case 'SET':
+      return action.notes
     default:
       return state;
   }
