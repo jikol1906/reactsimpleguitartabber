@@ -29,6 +29,31 @@ function removeNoteFromArr(
   });
 }
 
+function addNote(state:INote[][], note: INote, currentFretboard:number) {
+  return state.map((arr, i) => {
+    if (i === currentFretboard) {
+      const existingNote = findNote(arr, note); //check if there is already a note at this location
+      if (existingNote) {
+        const removedExistingNote = removeNoteFromArr(
+          arr,
+          existingNote.x,
+          existingNote.y
+        ); //Remove note from state
+        const noteCopy = { ...existingNote }; //Copy existing note to not mutate state
+        if (noteCopy.value.length < 2) {
+          //If length of existing note is only one, append value of newly added note
+          noteCopy.value += note.value;
+          return [...removedExistingNote, noteCopy];
+        }
+        return [...removedExistingNote, note];
+      }
+      return [...arr, note];
+    }
+
+    return arr;
+  });
+}
+
 function findNote(state: INote[], note: INote): INote | undefined {
   return state.find((n) => n.x === note.x && n.y === note.y);
 }
@@ -36,28 +61,7 @@ function findNote(state: INote[], note: INote): INote | undefined {
 export default (state: INote[][], action: Actions): INote[][] => {
   switch (action.type) {
     case 'ADD_NOTE':
-      return state.map((arr, i) => {
-        if (i === action.currentFretboard) {
-          const existingNote = findNote(arr, action.note); //check if there is already a note at this location
-          if (existingNote) {
-            const removedExistingNote = removeNoteFromArr(
-              arr,
-              existingNote.x,
-              existingNote.y
-            ); //Remove note from state
-            const noteCopy = { ...existingNote }; //Copy existing note to not mutate state
-            if (noteCopy.value.length < 2) {
-              //If length of existing note is only one, append value of newly added note
-              noteCopy.value += action.note.value;
-              return [...removedExistingNote, noteCopy];
-            }
-            return [...removedExistingNote, action.note];
-          }
-          return [...arr, action.note];
-        }
-
-        return arr;
-      });
+      return addNote(state,action.note,action.currentFretboard)
     case 'NEW_FRETBOARD':
       return [...state, []];
     case 'REMOVE_FRETBOARD':

@@ -19,6 +19,7 @@ interface State {
   currentFretboard: number;
   extendDown: number;
   extendRight: number;
+  copiedNotes: INote[]
 }
 
 const moveNoteSelectorUp = (state: State): State => {
@@ -73,6 +74,16 @@ const extendNoteSelectorRight = (state: State): State => {
 const moveToFretboard = (state:State,fretNumber:number) => {
   return {...state,currentFretboard:fretNumber}
 }
+
+const copyNotesInRange = (state:State, notes:INote[]) => {
+    return {...state,copiedNotes:notes.filter(({x,y}) => {
+      const isInXRange = x >= state.x && x <= state.x+state.extendRight
+      const isInYRange = y >= state.y && y <= state.y+state.extendDown
+      return isInXRange && isInYRange;
+    })}
+}
+
+
 export default (state: State, action: Actions): State => {
   switch (action.type) {
     case 'MOVE_DOWN':
@@ -99,6 +110,8 @@ export default (state: State, action: Actions): State => {
         extendRight: 0,
         extendDown: 0,
       };
+    case 'COPY_NOTES':
+      return copyNotesInRange(state,action.notes)
     default:
       return state;
   }

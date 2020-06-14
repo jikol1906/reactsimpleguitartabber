@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useReducer,
   useCallback,
-  useMemo,
 } from 'react';
 import Fretboard from './Wrapper/Fretboard';
 import './App.css';
@@ -14,11 +13,12 @@ import notesReducer from './Reducers/notes-reducer';
 import { Modal } from './UI/Modal/Modal';
 import noteselectorReducer from './Reducers/noteselector-reducer';
 import { useModal } from './UI/Modal/useModal';
+import { exampleState } from './testData';
 
 const App: React.FC = () => {
   const [tuning, setTuning] = useState(['E', 'A', 'D', 'G', 'B', 'E']);
   const [
-    { x, y, currentFretboard, extendDown, extendRight },
+    { x, y, currentFretboard, extendDown, extendRight, copiedNotes },
     dispatchNoteselector,
   ] = useReducer(noteselectorReducer, {
     x: 1,
@@ -26,6 +26,7 @@ const App: React.FC = () => {
     currentFretboard: 0,
     extendDown: 0,
     extendRight: 0,
+    copiedNotes:[]
   });
   const { modal, closeModal, openModal } = useModal();
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
@@ -84,16 +85,16 @@ const App: React.FC = () => {
   const removeFretBoard = useCallback(() => {
 
     const noteSelectorIsAtLastFretboard = currentFretboard === notes.length - 1;
-    const isOnlyOneFret = notes.length === 1
+    const isOnlyOneFretboard = notes.length === 1
     
-    if(!isOnlyOneFret && noteSelectorIsAtLastFretboard) {
+    if(!isOnlyOneFretboard && noteSelectorIsAtLastFretboard) {
       dispatchNoteselector({type:'MOVE_TO_FRET',fretNumber : notes.length - 2})
     }
 
     dispatchNotes({ type: 'REMOVE_FRETBOARD' });
 
     closeModal();
-  }, [closeModal]);
+  }, [closeModal, currentFretboard, notes.length]);
 
   const removeFretboardClickHandler = useCallback(() => {
     if (notes.length !== 1 && notes[notes.length - 1].length > 0) {
@@ -135,6 +136,11 @@ const App: React.FC = () => {
         case 'Escape':
           dispatchNoteselector({ type: 'CLEAR_EXTEND' });
           break;
+        case 'c':
+          if(e.metaKey || e.ctrlKey) {
+            dispatchNoteselector({type:'COPY_NOTES',notes:notes[currentFretboard]})
+          }
+        break;
         default:
           if (/[0-9]/.test(e.key)) {
             addNote(e.key);
@@ -154,7 +160,11 @@ const App: React.FC = () => {
       document.removeEventListener('keydown', arrowKeyPressed);
       window.removeEventListener('keydown', preventScrolling);
     };
-  }, [addNote, currentFretboard, removeNote]);
+  }, [addNote, currentFretboard, notes, removeNote]);
+
+  useEffect(() => {
+    console.log(copiedNotes)
+  },[copiedNotes])
 
   const fretboards: JSX.Element[] = [];
 

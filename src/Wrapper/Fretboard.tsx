@@ -1,6 +1,5 @@
 import React from 'react';
 import './Fretboard.css';
-import Note from '../Note/Note';
 import INote from '../Models/INotes';
 import { Tuning } from './Tuning/Tuning';
 import { Notes } from './Notes/Notes';

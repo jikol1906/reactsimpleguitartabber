@@ -6,6 +6,7 @@
     background-color: white;
     height: 56px;
     z-index: 1;
+    border-bottom: 2px solid gray;
 }
 
 .spacer {
@@ -28,10 +29,9 @@
 }
 
 .toolbar__logo a {
-    
     text-decoration: none;
     font-size: 25px;
-
+    color:black;
 }
 
 .toolbar_navigation_items li {
