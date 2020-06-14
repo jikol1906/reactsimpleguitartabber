@@ -1,11 +1,18 @@
 .note {
+    background: #fff;
+}
+
+.note__wrapper {
+    height: 1em;
+    width: 1em;
+    top: 0;
+    left: 0;
     position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
-    top: 0;
-    left: 0;
-    height: 1em;
-    width: 1em;
-    background: #fff;
+}
+
+.note__string_name {
+    justify-content: start;
 }

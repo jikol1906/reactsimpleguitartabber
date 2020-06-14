@@ -9,7 +9,7 @@ interface Props {
 export const Notes: React.FC<Props> = React.memo(({ notes }) => (
   <React.Fragment>
     {notes.map(({ x, y, value }) => (
-      <Note key={`${x}${y}`} x={x} y={y} val={value} />
+      <Note isStringName={false} key={`${x}${y}`} x={x} y={y} val={value} />
     ))}
   </React.Fragment>
 ));

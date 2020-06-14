@@ -1,8 +1,10 @@
 import React from 'react';
-import './Note.css'
+import './Note.css';
 
-export default ({x,y,val}) => 
-    <span className="note" style={{transform: `translate(${x}em,${y}em)`}}>{val}</span>
-
-
-
+export default ({ x, y, val, isStringName }) => (
+  <div style={{ transform: `translate(${x}em,${y}em)` }} className={isStringName ? 'note__wrapper note__string_name' : 'note__wrapper'}>
+      <span className='note'>
+        {val}
+      </span>
+  </div>
+);

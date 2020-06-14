@@ -9,7 +9,7 @@ export const Tuning: React.FC<Props> = React.memo(({ tuning }) => {
   return (
     <React.Fragment>
       {tuning.map((t, i) => (
-        <Note key={i} x={0} y={i} val={t} />
+        <Note isStringName={true} key={i} x={0} y={i} val={t} />
       ))}
     </React.Fragment>
   );
