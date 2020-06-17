@@ -25,13 +25,6 @@ const Toolbar: React.FC<Props> = ({addFretBoard, removeFretBoard, clearNotes,add
         <div className='toolbar_navigation_items'>
           <ul>
             <li>
-              <select name='cars' id='cars'>
-                <option value='arp'>Arpeggio</option>
-                <option value='note'>Note</option>
-                <option value='chord'>Chord</option>
-              </select>
-            </li>
-            <li>
               <NavbarButton click={addFretBoard}>New Fretboard</NavbarButton>
             </li>
             <li>
