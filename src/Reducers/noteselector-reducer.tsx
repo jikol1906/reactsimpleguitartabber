@@ -78,7 +78,10 @@ const extendNoteSelectorRight = (state: State): State => {
     ...state,
     extendRight: canExtendLeft ? state.extendRight + 1 : state.extendRight,
   };
-  
+};
+
+const moveToFretboard = (state: State, fretNumber: number) => {
+  return { ...state, currentFretboard: fretNumber };
 };
 
 const copyNotesInRange = (state: State, notes: INote[]) => {
@@ -111,7 +114,7 @@ export default (state: State, action: Actions): State => {
     case 'EXTEND_RIGHT':
       return extendNoteSelectorRight(state);
     case 'MOVE_TO_FRET':
-      return moveToFretboard(state,action.fretNumber)
+      return moveToFretboard(state, action.fretNumber);
     case 'CLEAR_EXTEND':
       return {
         ...state,
