@@ -29,21 +29,24 @@ const moveNoteSelectorUp = (state: State): State => {
     return {
       ...state,
       currentFretboard: state.currentFretboard - 1,
-      y: 5,
+      y: 5-state.extendDown,
     };
   }
   return { ...state, y: state.y === 0 ? 0 : state.y - 1 };
 };
 
 const moveNoteSelectorDown = (state: State, numOfFretboards: number): State => {
-  if (state.currentFretboard < numOfFretboards - 1 && state.y === 5) {
+  if (
+    state.currentFretboard < numOfFretboards - 1 &&
+    state.y + state.extendDown === 5
+  ) {
     return {
       ...state,
       currentFretboard: state.currentFretboard + 1,
       y: 0,
     };
   }
-  return { ...state, y: state.y === 5 ? 5 : state.y + 1 };
+  return { ...state, y: state.y+state.extendDown === 5 ? state.y : state.y + 1 };
 };
 
 const moveNoteSelectorLeft = (state: State): State => ({
