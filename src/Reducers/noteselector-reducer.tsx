@@ -10,8 +10,13 @@ type Actions =
   | { type: 'EXTEND_LEFT' }
   | { type: 'EXTEND_RIGHT' }
   | { type: 'CLEAR_EXTEND' }
-  | { type: 'COPY_NOTES', notes: INote[],copyPointX:number,copyPointY:number}
-  | { type: 'MOVE_TO_FRET', fretNumber:number};
+  | {
+      type: 'COPY_NOTES';
+      notes: INote[];
+      copyPointX: number;
+      copyPointY: number;
+    }
+  | { type: 'MOVE_TO_FRET'; fretNumber: number };
 
 interface State {
   x: number;
@@ -19,9 +24,9 @@ interface State {
   currentFretboard: number;
   extendDown: number;
   extendRight: number;
-  copiedNotes: INote[]
-  copyPointX:number,
-  copyPointY:number
+  copiedNotes: INote[];
+  copyPointX: number;
+  copyPointY: number;
 }
 
 const moveNoteSelectorUp = (state: State): State => {
@@ -76,18 +81,16 @@ const extendNoteSelectorRight = (state: State): State => {
   
 };
 
-const moveToFretboard = (state:State,fretNumber:number) => {
-  return {...state,currentFretboard:fretNumber}
-}
-
-const copyNotesInRange = (state:State, notes:INote[]) => {
-    return {...state,copiedNotes:notes.filter(({x,y}) => {
-      const isInXRange = x >= state.x && x <= state.x+state.extendRight
-      const isInYRange = y >= state.y && y <= state.y+state.extendDown
+const copyNotesInRange = (state: State, notes: INote[]) => {
+  return {
+    ...state,
+    copiedNotes: notes.filter(({ x, y }) => {
+      const isInXRange = x >= state.x && x <= state.x + state.extendRight;
+      const isInYRange = y >= state.y && y <= state.y + state.extendDown;
       return isInXRange && isInYRange;
-    })}
-}
-
+    }),
+  };
+};
 
 export default (state: State, action: Actions): State => {
   switch (action.type) {
@@ -117,10 +120,10 @@ export default (state: State, action: Actions): State => {
       };
     case 'COPY_NOTES':
       return {
-        ...copyNotesInRange(state,action.notes),
-        copyPointX:action.copyPointX,
-        copyPointY:action.copyPointY
-      }
+        ...copyNotesInRange(state, action.notes),
+        copyPointX: action.copyPointX,
+        copyPointY: action.copyPointY,
+      };
     default:
       return state;
   }
