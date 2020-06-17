@@ -137,10 +137,15 @@ const App: React.FC = () => {
           dispatchNoteselector({ type: 'CLEAR_EXTEND' });
           break;
         case 'c':
-          if(e.metaKey || e.ctrlKey) {
-            dispatchNoteselector({type:'COPY_NOTES',notes:notes[currentFretboard]})
+          if (e.metaKey || e.ctrlKey) {
+            dispatchNoteselector({
+              type: 'COPY_NOTES',
+              notes: notes[currentFretboard],
+              copyPointX:x,
+              copyPointY:y,
+            });
           }
-        break;
+          break;
         default:
           if (/[0-9]/.test(e.key)) {
             addNote(e.key);

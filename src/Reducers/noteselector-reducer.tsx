@@ -10,7 +10,7 @@ type Actions =
   | { type: 'EXTEND_LEFT' }
   | { type: 'EXTEND_RIGHT' }
   | { type: 'CLEAR_EXTEND' }
-  | { type: 'COPY_NOTES', notes: INote[]}
+  | { type: 'COPY_NOTES', notes: INote[],copyPointX:number,copyPointY:number}
   | { type: 'MOVE_TO_FRET', fretNumber:number};
 
 interface State {
@@ -20,6 +20,8 @@ interface State {
   extendDown: number;
   extendRight: number;
   copiedNotes: INote[]
+  copyPointX:number,
+  copyPointY:number
 }
 
 const moveNoteSelectorUp = (state: State): State => {
@@ -111,7 +113,11 @@ export default (state: State, action: Actions): State => {
         extendDown: 0,
       };
     case 'COPY_NOTES':
-      return copyNotesInRange(state,action.notes)
+      return {
+        ...copyNotesInRange(state,action.notes),
+        copyPointX:action.copyPointX,
+        copyPointY:action.copyPointY
+      }
     default:
       return state;
   }
