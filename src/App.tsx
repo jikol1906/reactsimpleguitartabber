@@ -12,19 +12,7 @@ import { exampleState } from './testData';
 
 const App: React.FC = () => {
   const [tuning, setTuning] = useState(['E', 'A', 'D', 'G', 'B', 'E']);
-  const [
-    {
-      x,
-      y,
-      currentFretboard,
-      extendDown,
-      extendRight,
-      copiedNotes,
-      copyPointX,
-      copyPointY,
-    },
-    dispatchNoteselector,
-  ] = useReducer(noteselectorReducer, {
+  const [selector, dispatchNoteselector] = useReducer(noteselectorReducer, {
     x: 1,
     y: 0,
     currentFretboard: 0,
@@ -51,23 +39,23 @@ const App: React.FC = () => {
     (value: string) => {
       dispatchNotes({
         type: 'ADD_NOTE',
-        note: { x, y, value },
-        currentFretboard,
+        note: { x: selector.x, y: selector.y, value },
+        currentFretboard: selector.currentFretboard,
       });
     },
-    [x, y, currentFretboard]
+    [selector]
   );
 
   const removeNote = useCallback(() => {
     dispatchNotes({
       type: 'REMOVE_NOTE',
-      x,
-      y,
-      currentFretboard,
-      extendDown,
-      extendRight,
+      x: selector.x,
+      y: selector.y,
+      currentFretboard: selector.currentFretboard,
+      extendDown: selector.extendDown,
+      extendRight: selector.extendRight,
     });
-  }, [x, y, currentFretboard, extendDown, extendRight]);
+  }, [selector]);
 
   const clearNotes = useCallback(() => {
     dispatchNotes({ type: 'CLEAR' });
@@ -89,7 +77,8 @@ const App: React.FC = () => {
   }, []);
 
   const removeFretBoard = useCallback(() => {
-    const noteSelectorIsAtLastFretboard = currentFretboard === notes.length - 1;
+    const noteSelectorIsAtLastFretboard =
+      selector.currentFretboard === notes.length - 1;
     const isOnlyOneFretboard = notes.length === 1;
 
     if (!isOnlyOneFretboard && noteSelectorIsAtLastFretboard) {
@@ -102,7 +91,7 @@ const App: React.FC = () => {
     dispatchNotes({ type: 'REMOVE_FRETBOARD' });
 
     closeModal();
-  }, [closeModal, currentFretboard, notes.length]);
+  }, [closeModal, selector, notes.length]);
 
   const removeFretboardClickHandler = useCallback(() => {
     if (notes.length !== 1 && notes[notes.length - 1].length > 0) {
@@ -151,9 +140,9 @@ const App: React.FC = () => {
           if (e.metaKey || e.ctrlKey) {
             dispatchNoteselector({
               type: 'COPY_NOTES',
-              notes: notes[currentFretboard],
-              copyPointX:x,
-              copyPointY:y,
+              notes: notes[selector.currentFretboard],
+              copyPointX: selector.x,
+              copyPointY: selector.y,
             });
           }
           break;
@@ -176,7 +165,7 @@ const App: React.FC = () => {
       document.removeEventListener('keydown', arrowKeyPressed);
       window.removeEventListener('keydown', preventScrolling);
     };
-  }, [addNote, currentFretboard, notes, removeNote,copyPointX,copyPointY]);
+  }, [addNote, selector, notes, removeNote]);
 
   const fretboards: JSX.Element[] = [];
 
@@ -187,7 +176,14 @@ const App: React.FC = () => {
           dispatchNoteselector({ type: 'MOVE_TO_FRET', fretNumber: i })
         }
         noteSelectorPosition={
-          currentFretboard === i ? { x, y, extendDown, extendRight } : null
+          selector.currentFretboard === i
+            ? {
+                x: selector.x,
+                y: selector.y,
+                extendDown: selector.extendDown,
+                extendRight: selector.extendRight,
+              }
+            : null
         }
         key={i}
         tuning={tuning}
