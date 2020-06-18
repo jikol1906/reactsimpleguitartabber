@@ -34,7 +34,7 @@ const moveNoteSelectorUp = (state: State): State => {
     return {
       ...state,
       currentFretboard: state.currentFretboard - 1,
-      y: 5-state.extendDown,
+      y: 5 - state.extendDown,
     };
   }
   return { ...state, y: state.y === 0 ? 0 : state.y - 1 };
@@ -51,7 +51,10 @@ const moveNoteSelectorDown = (state: State, numOfFretboards: number): State => {
       y: 0,
     };
   }
-  return { ...state, y: state.y+state.extendDown === 5 ? state.y : state.y + 1 };
+  return {
+    ...state,
+    y: state.y + state.extendDown === 5 ? state.y : state.y + 1,
+  };
 };
 
 const moveNoteSelectorLeft = (state: State): State => ({
