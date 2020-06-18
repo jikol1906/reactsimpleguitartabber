@@ -3,6 +3,15 @@ import INote from '../Models/INotes';
 type Actions =
   | { type: 'ADD_NOTE'; note: INote; currentFretboard: number }
   | {
+      type: 'INSERT_RANGE';
+      copiedNotes: INote[];
+      x: number;
+      y: number;
+      currentFretboard: number;
+      copyPointX: number;
+      copyPointY: number;
+    }
+  | {
       type: 'REMOVE_NOTE';
       x: number;
       y: number;
@@ -61,7 +70,9 @@ function findNote(state: INote[], note: INote): INote | undefined {
 export default (state: INote[][], action: Actions): INote[][] => {
   switch (action.type) {
     case 'ADD_NOTE':
-      return addNote(state,action.note,action.currentFretboard)
+      return addNote(state, action.note, action.currentFretboard);
+    case 'INSERT_RANGE':
+    //  return insertRange(state,action.currentFretboard,action.x,action.y,action.copyPointX,action.copyPointY)
     case 'NEW_FRETBOARD':
       return [...state, []];
     case 'REMOVE_FRETBOARD':
