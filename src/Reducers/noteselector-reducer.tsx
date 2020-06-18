@@ -61,7 +61,7 @@ const moveNoteSelectorLeft = (state: State): State => ({
 
 const moveNoteSelectorRight = (state: State): State => ({
   ...state,
-  x: state.x === 36 ? 36 : state.x + 1,
+  x: state.x + state.extendRight === 36 ? state.x : state.x + 1,
 });
 
 const extendNoteSelectorDown = (state: State): State => {
