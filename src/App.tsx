@@ -146,6 +146,19 @@ const App: React.FC = () => {
             });
           }
           break;
+        case 'v':
+          if (e.metaKey || e.ctrlKey) {
+            dispatchNotes({
+              type: 'INSERT_RANGE',
+              copiedNotes:selector.copiedNotes,
+              copyPointX:selector.copyPointX,
+              copyPointY:selector.copyPointY,
+              currentFretboard:selector.currentFretboard,
+              x:selector.x,
+              y:selector.y
+            });
+          }
+          break;
         default:
           if (/[0-9]/.test(e.key)) {
             addNote(e.key);

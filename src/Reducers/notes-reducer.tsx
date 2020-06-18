@@ -67,12 +67,40 @@ function findNote(state: INote[], note: INote): INote | undefined {
   return state.find((n) => n.x === note.x && n.y === note.y);
 }
 
+function insertRange(
+  state: INote[][],
+  copiedNotes: INote[],
+  currentFretboard: number,
+  x: number,
+  y: number,
+  copyPointX: number,
+  copyPoinyY: number
+) {
+  const deltaX = x - copyPointX;
+  const deltaY = y - copyPoinyY;
+
+  const noteCopies = copiedNotes.map((n) => {
+    const nCopy = { ...n };
+    nCopy.x = nCopy.x + deltaX;
+    nCopy.y = nCopy.y + deltaY;
+    return nCopy;
+  });
+
+  let updatedState = state;
+
+  noteCopies.forEach(n => {
+    updatedState = addNote(updatedState,n,currentFretboard)
+  })
+
+  return updatedState;
+}
+
 export default (state: INote[][], action: Actions): INote[][] => {
   switch (action.type) {
     case 'ADD_NOTE':
       return addNote(state, action.note, action.currentFretboard);
     case 'INSERT_RANGE':
-    //  return insertRange(state,action.currentFretboard,action.x,action.y,action.copyPointX,action.copyPointY)
+        return insertRange(state,action.copiedNotes,action.currentFretboard,action.x,action.y,action.copyPointX,action.copyPointY)
     case 'NEW_FRETBOARD':
       return [...state, []];
     case 'REMOVE_FRETBOARD':
