@@ -1,6 +1,5 @@
 .modal {
   position: fixed;
-  box-sizing: border-box;
   top: 50%;
   left: 50%;
   min-width: 300px;

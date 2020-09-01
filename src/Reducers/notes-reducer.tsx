@@ -22,7 +22,7 @@ type Actions =
   | { type: 'NEW_FRETBOARD' }
   | { type: 'REMOVE_FRETBOARD' }
   | { type: 'CLEAR' }
-  | { type: 'SET', notes: INote[][]};
+  | { type: 'SET'; notes: INote[][] };
 
 function removeNoteFromArr(
   state: INote[],
@@ -38,7 +38,7 @@ function removeNoteFromArr(
   });
 }
 
-function addNote(state:INote[][], note: INote, currentFretboard:number) {
+function addNote(state: INote[][], note: INote, currentFretboard: number) {
   return state.map((arr, i) => {
     if (i === currentFretboard) {
       const existingNote = findNote(arr, note); //check if there is already a note at this location
@@ -126,7 +126,7 @@ export default (state: INote[][], action: Actions): INote[][] => {
 
       return numOfFretboards;
     case 'SET':
-      return action.notes
+      return action.notes;
     default:
       return state;
   }
